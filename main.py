@@ -2,7 +2,7 @@ from model_covid19 import *
 from estimate_model import *
 
 def main():
-    path="C:\\Users\\Lenovo\\Desktop\\covid-19-senegal\\data_v5.csv"
+    path=<put path of your file>
     k=18
     data=input_data(path)
     fit1=train_amorti(data,k)
