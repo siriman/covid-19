@@ -1,74 +1,75 @@
-import requests
 import pandas as pd
-import json
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from statsmodels.tsa.holtwinters import SimpleExpSmoothing, Holt
 import numpy as np
+import datetime as dt
 from sklearn.metrics import mean_squared_error
 from estimate_model import *
-#%matplotlib inline
-#plt.style.use('Solarize_Light2')
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 import warnings
-warnings.filterwarnings("ignore") # specify to ignore warning messages
-#from pandas.plotting import register_matplotlib_converters
-#register_matplotlib_converters()
-
-#cov = cov = pd.read_csv('new_datav5.csv', sep=';')
+warnings.filterwarnings("ignore")
 
 def input_data(path):
     cov=pd.read_csv(path)
     return cov
-###########################Split######################################
+###########################Split###############################################################
 
 def split_data(data,k):
     data1=data['Senegal'][0:k]
     data2=data['Senegal'][k:]
     return data1, data2
 
-###########################Train holt tendance linéaire###################################
+###########################Train holt linear trend#############################################
 
-def train_lineaire(data,k):
-    data=split_data(data,k)
-    data1=data[0]
-    data2=data[1]
-    temps=data1.index
-    params_ln=estimate_ln_params(data1)
-    predicted=func_ln(params_ln[0],params_ln[1],temps)
-    predicted=pd.Series(predicted)
-    data3=predicted.append(data2)
-    params_holt=estimate_holt_lineaire(data3)
-    fit = Holt(data3).fit(smoothing_level=params_holt[0], smoothing_slope=params_holt[1])
-    return fit
+def train_lineaire(data,country_name):
+    k=18
+    #country_name=input_data("Enter the name of Country ")
+    #data=split_data(data,k)
+    #data=input_data(path)
+    #data1=data[0]
+    #data2=data[1]
+    y=data[country_name]
+    data=data.drop(data[y==0].index)
+    data= data.reset_index()
+    #data=data[country_name]
+    params_holt=estimate_holt_lineaire(data[country_name])
+    fit = Holt(data[country_name]).fit(smoothing_level=params_holt[0], smoothing_slope=params_holt[1])
+    return fit, data
 
 
-###########################Train holt tendance amorti###################################
+###########################Train holt amortized trend###################################
 
-def train_amorti(data,k):
-    data=split_data(data,k)
-    data1=data[0]
-    data2=data[1]
-    temps=data1.index
-    params_ln=estimate_ln_params(data1)
-    predicted=func_ln(params_ln[0],params_ln[1],temps)
-    predicted=pd.Series(predicted)
-    data3=predicted.append(data2)
-    params_holt=estimate_holt_amorti(data3)
-    fit = Holt(data3, damped=True).fit(smoothing_level=params_holt[0], smoothing_slope=params_holt[1])
-    return fit
+def train_amortized(data,country_name):
+   # k=18
+    y=data[country_name]
+    data=data.drop(data[y==0].index)
+    data= data.reset_index()
+    #data=data[country_name]
+    #temps=data1.index
+    params_holt=estimate_holt_amorti(data[country_name])
+    fit = Holt(data[country_name], damped=True).fit(smoothing_level=params_holt[0], smoothing_slope=params_holt[1])
+    return fit, data
 ##+#######################Prediction pour les 5 prochains jours#########################################
  
-def prediction(fit):
+def prediction(fit,df):
     fcast = fit.forecast(5).rename("Trend")
+    a=pd.to_datetime(df["date"].iloc[-1])
+    ind=pd.date_range(start=a,periods=6)
+    fcast.index=ind[1:]
     return fcast
 
 #########################################################################################################################
 
-def plot_data(data,predicted):
-    plt.figure(figsize=(12,8),dpi=200)
-    plt.plot(data, label="Cases") # la courbe des données réelles 
-    plt.plot(predicted, label="Predicted")
+def plot_data(data,predicted, dates):
+    fig, ax = plt.subplots(figsize=(12, 10))
+    ax.set(xlabel="Date", ylabel="Number of confirmed cases in Senegal", title="COVID-19 spread in Senegal")
+    x = [dt.datetime.strptime(d,'%d/%m/%Y').date() for d in dates]
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%d/%Y'))
+    plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=5))
+    plt.plot(x,data, label="Reported total cases")
+    plt.plot(x,predicted, label="OMSK Predicted total cases")
+    plt.gcf().autofmt_xdate()
     plt.legend()
     plt.show()

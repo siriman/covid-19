@@ -4,21 +4,22 @@ import matplotlib.dates as mdates
 from statsmodels.tsa.holtwinters import SimpleExpSmoothing, Holt
 import numpy as np
 from sklearn.metrics import mean_squared_error
-from model_covid19 import *
+from covid19_spread_prediction_omskmodel import *
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 import warnings
 warnings.filterwarnings("ignore")
 
-#################################################fonction bt*ln(1+at)######################################        
+#################################################function bt*ln(1+at)#######################################################################        
 def func_ln(a,b,t):
     y=a*t*np.log(1+b*t)
     return  y
-#############################################charger les données####################################   
+#############################################input data#####################################################################################
 def input_data(path):
-    cov=pd.read_csv(path)
+    sep=input("Enter the separator")
+    cov=pd.read_csv(path,sep)
     return cov    
-##########################################estimer parametre a et b de la fonction bt*ln(1+at) ##########################################
+########################################estimate  a and b parameters for the fonction bt*ln(1+at) ##########################################
 def estimate_ln_params(data):
     temps=data.index
     value_poss=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
@@ -33,7 +34,7 @@ def estimate_ln_params(data):
     ind=mse_list.index(min(mse_list))
     return params[ind]
 
-##########################################estimer parametres holt linéaire ##########################################
+##########################################estimer parametres holt linéaire #################################################################
 def estimate_holt_lineaire(data):
     value_poss=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
     mse_list=[]
@@ -49,7 +50,7 @@ def estimate_holt_lineaire(data):
     return params[ind]
 
 
-##########################################estimer parametres holt amorti ##########################################
+##########################################estimate holt amortized parameters##########################################
 def estimate_holt_amorti(data):
     value_poss=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
     mse_list=[]
@@ -63,7 +64,9 @@ def estimate_holt_amorti(data):
             params.append((i,j))
     ind=mse_list.index(min(mse_list))    
     return params[ind]
-########################################Calculer le mean square error#########################################################
+########################################Compute mean square error#########################################################
 def mean_sqrt(x,y):
     error = mean_squared_error(x, y)
     return error
+########################################################################################################################################################################################################################################################################################
+############################################################################################################################################
