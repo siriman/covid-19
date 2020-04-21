@@ -15,6 +15,10 @@ This section presents the proposed omskHolt method. This is a chronological
 method for predicting confirmed cases of COVID-19, as shown in Figure 1
 ![1](https://user-images.githubusercontent.com/16143588/79891579-b5943480-83f0-11ea-8dd1-57a60177fb3d.PNG)
 
+![2](https://user-images.githubusercontent.com/16143588/79892042-669acf00-83f1-11ea-992c-7b7f06494ab4.PNG)
+
+![3](https://user-images.githubusercontent.com/16143588/79892055-6bf81980-83f1-11ea-8614-80b380d537df.PNG)
+
 ## Step 0: Clone the projet
 git clone https://github.com/siriman/covid-19-senegal.git
 
