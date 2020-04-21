@@ -10,6 +10,9 @@ We have chosen to use the data format below. In this format, we have the cumulat
 ![data format](https://user-images.githubusercontent.com/16143588/79075306-8a6b6000-7ce1-11ea-9136-2db291e918b9.PNG)
 
 ![math_form1](https://user-images.githubusercontent.com/16143588/79889978-50d7da80-83ee-11ea-8b40-87c18a3a4993.PNG)
+## 2 Proposed Model
+This section presents the proposed omskHolt method. This is a chronological
+method for predicting confirmed cases of COVID-19, as shown in Figure 1
 
 ## Step 0: Clone the projet
 git clone https://github.com/siriman/covid-19-senegal.git
