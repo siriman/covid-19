@@ -11,10 +11,6 @@ We have chosen to use the data format below. In this format, we have the cumulat
 
 ![math_form1](https://user-images.githubusercontent.com/16143588/79889978-50d7da80-83ee-11ea-8b40-87c18a3a4993.PNG)
 
-![form2](https://user-images.githubusercontent.com/16143588/79890000-5af9d900-83ee-11ea-8b02-55679bc212d1.PNG)
-
-![form3](https://user-images.githubusercontent.com/16143588/79890051-6f3dd600-83ee-11ea-9843-70ab77dec5b4.PNG)
-
 ## Step 0: Clone the projet
 git clone https://github.com/siriman/covid-19-senegal.git
 
