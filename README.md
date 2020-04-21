@@ -9,9 +9,12 @@ We have chosen to use the data format below. In this format, we have the cumulat
 
 ![data format](https://user-images.githubusercontent.com/16143588/79075306-8a6b6000-7ce1-11ea-9136-2db291e918b9.PNG)
 
-## Proposed Model
+![math_form1](https://user-images.githubusercontent.com/16143588/79889978-50d7da80-83ee-11ea-8b40-87c18a3a4993.PNG)
 
-The main goal of this project is to predict the spread of COVID-19 in the world and specialy in Senegal.
+![form2](https://user-images.githubusercontent.com/16143588/79890000-5af9d900-83ee-11ea-8b02-55679bc212d1.PNG)
+
+![form3](https://user-images.githubusercontent.com/16143588/79890051-6f3dd600-83ee-11ea-9843-70ab77dec5b4.PNG)
+
 ## Step 0: Clone the projet
 git clone https://github.com/siriman/covid-19-senegal.git
 
