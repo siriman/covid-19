@@ -14,11 +14,11 @@ warnings.filterwarnings("ignore")
 def input_data(path):
     cov=pd.read_csv(path)
     return cov
-###########################Split###############################################################
+##############################################Split###############################################################
 
 def split_data(data,k):
-    data1=data['Senegal'][0:k]
-    data2=data['Senegal'][k:]
+    data1=data[0:k]
+    data2=data[k:]
     return data1, data2
 
 ###########################Train holt linear trend#############################################
@@ -33,9 +33,24 @@ def train_lineaire(data,country_name):
     y=data[country_name]
     data=data.drop(data[y==0].index)
     data= data.reset_index()
+    if country_name=="Senegal":
+        #date=data["date"]
+        dta1, dta2=split_data(data,18)
+        temps=dta1.index
+        params_ln=estimate_ln_params(dta1[country_name])
+        predicted=func_ln(params_ln[0],params_ln[1],temps)
+        #predicted=pd.Series(predicted)
+        dta1[country_name]=predicted
+        data=dta1.append(dta2)
+        #data=pd.DataFrame(pred,columns=["Senegal"])
+        #data['date']=date
+        params_holt=estimate_holt_lineaire(data[country_name])
+        fit = Holt(data[country_name]).fit(smoothing_level=params_holt[0], smoothing_slope=params_holt[1])
+        #print(data.tail())
+    else:
     #data=data[country_name]
-    params_holt=estimate_holt_lineaire(data[country_name])
-    fit = Holt(data[country_name]).fit(smoothing_level=params_holt[0], smoothing_slope=params_holt[1])
+        params_holt=estimate_holt_lineaire(data[country_name])
+        fit = Holt(data[country_name]).fit(smoothing_level=params_holt[0], smoothing_slope=params_holt[1])
     return fit, data
 
 
@@ -46,12 +61,25 @@ def train_amortized(data,country_name):
     y=data[country_name]
     data=data.drop(data[y==0].index)
     data= data.reset_index()
+    if country_name=="Senegal":
+        dta1, dta2=split_data(data,18)
+        temps=dta1.index
+        params_ln=estimate_ln_params(dta1[country_name])
+        predicted=func_ln(params_ln[0],params_ln[1],temps)
+        #predicted=pd.Series(predicted)
+        dta1[country_name]=predicted
+        data=dta1.append(dta2)
+        params_holt=estimate_holt_amorti(data[country_name])
+        fit = Holt(data[country_name], damped=True).fit(smoothing_level=params_holt[0], smoothing_slope=params_holt[1])
+    else:
+    #data=data[country_name]
+        params_holt=estimate_holt_amorti(data[country_name])
+        fit = Holt(data[country_name], damped=True).fit(smoothing_level=params_holt[0], smoothing_slope=params_holt[1])
     #data=data[country_name]
     #temps=data1.index
-    params_holt=estimate_holt_amorti(data[country_name])
-    fit = Holt(data[country_name], damped=True).fit(smoothing_level=params_holt[0], smoothing_slope=params_holt[1])
+    
     return fit, data
-##+#######################Prediction pour les 5 prochains jours#########################################
+##+######################################Prediction pour les 5 prochains jours#########################################
  
 def prediction(fit,df):
     fcast = fit.forecast(5).rename("Trend")
@@ -60,13 +88,13 @@ def prediction(fit,df):
     fcast.index=ind[1:]
     return fcast
 
-#########################################################################################################################
+################################################################################################################################
 
 def plot_data(data,predicted, dates):
     fig, ax = plt.subplots(figsize=(12, 10))
     ax.set(xlabel="Date", ylabel="Number of confirmed cases in Senegal", title="COVID-19 spread in Senegal")
-    x = [dt.datetime.strptime(d,'%d/%m/%Y').date() for d in dates]
-    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%d/%Y'))
+    x = [dt.datetime.strptime(d,'%Y-%m-%d').date() for d in dates]
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
     plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=5))
     plt.plot(x,data, label="Reported total cases")
     plt.plot(x,predicted, label="OMSK Predicted total cases")

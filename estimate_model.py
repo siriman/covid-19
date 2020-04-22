@@ -14,9 +14,10 @@ warnings.filterwarnings("ignore")
 def func_ln(a,b,t):
     y=a*t*np.log(1+b*t)
     return  y
+
 #############################################input data#####################################################################################
 def input_data(path):
-    sep=input("Enter the separator")
+    sep=input("Enter the separator ")
     cov=pd.read_csv(path,sep)
     return cov    
 ########################################estimate  a and b parameters for the fonction bt*ln(1+at) ##########################################
@@ -64,7 +65,9 @@ def estimate_holt_amorti(data):
             params.append((i,j))
     ind=mse_list.index(min(mse_list))    
     return params[ind]
+##########################################################################################################################
 ########################################Compute mean square error#########################################################
+##########################################################################################################################
 def mean_sqrt(x,y):
     error = mean_squared_error(x, y)
     return error
