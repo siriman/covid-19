@@ -90,9 +90,9 @@ def prediction(fit,df):
 
 ################################################################################################################################
 
-def plot_data(data,predicted, dates):
+def plot_data(data,predicted, dates,country_name):
     fig, ax = plt.subplots(figsize=(12, 10))
-    ax.set(xlabel="Date", ylabel="Number of confirmed cases in Senegal", title="COVID-19 spread in Senegal")
+    ax.set(xlabel="Date", ylabel="Number of confirmed cases in "+country_name, title="COVID-19 spread in "+country_name)
     x = [dt.datetime.strptime(d,'%Y-%m-%d').date() for d in dates]
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
     plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=5))
