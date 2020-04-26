@@ -21,12 +21,11 @@ method for predicting confirmed cases of COVID-19, as shown in Figure 1
 
 ## Step 0: Clone the projet
 git clone https://github.com/siriman/covid-19-senegal.git
-
+ 
 ## Step 1: Install requirements
 pip install -r requirements.txt
-
 Modify **path** in main.py
-
+download data with the **download_data** function
 ## Step 2:
 
 Run **python main.py**
